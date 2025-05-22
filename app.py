@@ -8,9 +8,11 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
+
 @app.route('/')
 def index():
     return render_template('index.html')
+
 
 @app.route('/upload', methods=['POST'])
 def upload():
@@ -29,6 +31,8 @@ def upload():
 
     return jsonify({'plate': plate_text})
 
-# This block is only used for local testing. Render uses gunicorn.
-# if __name__ == '__main__':
-#    app.run(debug=True)
+
+# ✅ ЭТО ОБЯЗАТЕЛЬНО ДЛЯ RENDER
+if __name__ == '__main__':
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)

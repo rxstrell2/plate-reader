@@ -4,7 +4,7 @@ from paddleocr import PaddleOCR
 import cv2
 import re
 
-ocr = PaddleOCR(use_angle_cls=True, lang='en')
+ocr = PaddleOCR(use_angle_cls=True, lang='en', use_paddleocr=True)
 model = YOLO("license_plate_detector.pt")
 
 
