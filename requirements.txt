@@ -1,0 +1,15 @@
+Flask
+gunicorn
+opencv-python==4.6.0.66
+opencv-contrib-python==4.6.0.66
+ultralytics
+paddleocr
+attrdict
+beautifulsoup4
+cython
+fire
+pdf2docx
+PyMuPDF==1.20.2
+python-docx
+rapidfuzz
+visualdl
