@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>License Plate Scanner</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f4f6f8;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: start;
+            height: 100vh;
+            padding: 40px 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+        }
+
+        .scanner {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .custom-file-upload {
+            display: inline-block;
+            padding: 12px 24px;
+            cursor: pointer;
+            background-color: #2f80ed;
+            color: white;
+            border-radius: 8px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            transition: background-color 0.3s;
+        }
+
+        .custom-file-upload:hover {
+            background-color: #1366d6;
+        }
+
+        button {
+            background-color: #27ae60;
+            color: white;
+            padding: 12px 24px;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #1e8e4d;
+        }
+
+        #preview {
+            margin: 20px 0;
+            max-width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        #result {
+            font-size: 20px;
+            margin-top: 20px;
+            color: #2d3436;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>License Plate Scanner</h1>
+    <div class="scanner">
+        <label class="custom-file-upload">
+            <input type="file" id="imageInput" accept="image/*">
+            📷 Choose Image
+        </label>
+        <br>
+        <button onclick="uploadImage()">🚀 Scan</button>
+        <img id="preview" src="#" alt="Preview">
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const input = document.getElementById('imageInput');
+        const preview = document.getElementById('preview');
+        let selectedFile;
+
+        input.onchange = (e) => {
+            selectedFile = e.target.files[0];
+            preview.src = URL.createObjectURL(selectedFile);
+            preview.style.display = "block";
+        };
+
+        function uploadImage() {
+            const formData = new FormData();
+            formData.append('image', selectedFile);
+
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('result').textContent = "🚘 Найден номер: " + data.plate;
+                })
+                .catch(err => {
+                    console.error(err);
+                    document.getElementById('result').textContent = "❌ Ошибка при распознавании.";
+                });
+        }
+    </script>
+</body>
+
+</html>
