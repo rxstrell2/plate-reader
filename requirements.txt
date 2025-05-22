@@ -4,3 +4,4 @@ opencv-python
 opencv-contrib-python
 ultralytics
 paddleocr
+paddlepaddle==2.5.0

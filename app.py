@@ -29,5 +29,6 @@ def upload():
 
     return jsonify({'plate': plate_text})
 
-if __name__ == '__main__':
-    app.run(debug=True)
+# This block is only used for local testing. Render uses gunicorn.
+# if __name__ == '__main__':
+#    app.run(debug=True)
