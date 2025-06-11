@@ -2,7 +2,6 @@ app = "plate-reader"
 primary_region = "ord"
 
 [build]
-  image = "registry.fly.io/plate-reader:latest"
 
 [env]
   PORT = "8080"
@@ -18,4 +17,3 @@ primary_region = "ord"
   [[services.ports]]
     handlers = ["tls", "http"]
     port = 443
-
