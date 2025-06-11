@@ -1,5 +1,5 @@
 app = "plate-reader"
-primary_region = "ord"
+primary_region = "lhr"
 
 [build]
 

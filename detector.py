@@ -1,11 +1,10 @@
 from ultralytics import YOLO
-from paddleocr import PaddleOCR
+import easyocr
 import cv2
 import re
 
-ocr = PaddleOCR(use_angle_cls=True, lang='en')
+reader = easyocr.Reader(['en'])
 model = YOLO("license_plate_detector.pt")
-
 
 def is_kz_plate(text):
     patterns = [
@@ -14,7 +13,6 @@ def is_kz_plate(text):
         r'^[0-9]{1,3}[A-Z]{3}$',               # 314BGI (без региона)
     ]
     return any(re.fullmatch(p, text) for p in patterns)
-
 
 def detect_and_read_plate(image_path):
     image = cv2.imread(image_path)
@@ -28,30 +26,25 @@ def detect_and_read_plate(image_path):
             continue
 
         try:
-            ocr_result = ocr.ocr(plate_img, cls=False)
-            if ocr_result and len(ocr_result[0]) > 0:
+            ocr_results = reader.readtext(plate_img)
+            if ocr_results:
                 parts = []
-                for line in ocr_result[0]:
-                    text = line[1][0]
+                for result in ocr_results:
+                    text = result[1]
                     cleaned = re.sub(r'[^A-Z0-9]', '', text.upper())
                     if 2 <= len(cleaned) <= 8:
                         parts.append(cleaned)
 
                 combined = ''.join(parts)
 
-                # Прямой матч
                 if is_kz_plate(combined):
                     return combined
 
-                # Попытка найти в строке вручную, даже если есть лишнее
-                matches = re.findall(
-                    r'KZ?[0-9]{1,3}[A-Z]{3}[0-9]{2}', combined)
+                matches = re.findall(r'KZ?[0-9]{1,3}[A-Z]{3}[0-9]{2}', combined)
                 if matches:
                     return matches[0]
 
-                # На крайний случай — ищем что-то похожее
-                fallback = re.findall(
-                    r'[0-9]{1,3}[A-Z]{3}[0-9]{0,2}', combined)
+                fallback = re.findall(r'[0-9]{1,3}[A-Z]{3}[0-9]{0,2}', combined)
                 if fallback:
                     return fallback[0]
 
