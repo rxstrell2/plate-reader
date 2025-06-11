@@ -32,7 +32,6 @@ def upload():
     return jsonify({'plate': plate_text})
 
 
-# ✅ ЭТО ОБЯЗАТЕЛЬНО ДЛЯ RENDER
+# This block is only used for local testing. Render uses gunicorn.
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
+    app.run(debug=True)

@@ -1,10 +1,9 @@
-
 from ultralytics import YOLO
 from paddleocr import PaddleOCR
 import cv2
 import re
 
-ocr = PaddleOCR(use_angle_cls=True, lang='en', use_paddleocr=True)
+ocr = PaddleOCR(use_angle_cls=True, lang='en')
 model = YOLO("license_plate_detector.pt")
 
 
